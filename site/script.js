@@ -145,15 +145,10 @@
     $("#list-view").hidden = hasRoute;
     $("#detail-view").hidden = !hasRoute;
     $("#map-hint").hidden = hasRoute;
-    applySheet(); updateExpandButtons();
+    applySheet();
     if (map.instance) { map.instance.invalidateSize(); setTimeout(() => { map.instance.invalidateSize(); if (!isMobile() || state.sheet !== "open") fitCurrent(); }, 320); }
   }
   function setSheet(mode) { state.sheet = mode; applyLayout(); }
-  function updateExpandButtons() {
-    const open = isMobile() && state.sheet === "open";
-    $$("[data-expand]").forEach(b => { b.hidden = open; });
-    $$("[data-collapse]").forEach(b => { b.hidden = !open; });
-  }
   function setInfoOpen(open) { setSheet(open ? "open" : "half"); }
 
   /* ---------- filtres et liste ---------- */
@@ -450,10 +445,10 @@
     const v = route.variants[variantIndex];
     const stat = (value, unit, label) => `<div class="stat"><div class="stat-value">${value}${unit ? `<small>${unit}</small>` : ""}</div><div class="stat-label">${label}</div></div>`;
     $("#detail-head").innerHTML = `
-      <div class="head-row"><button type="button" class="back" id="back-to-list">← Tous les parcours</button><button type="button" class="close mobile-only" data-collapse aria-label="Fermer la fiche">×</button></div>
+      <button type="button" class="back" id="back-to-list">← Tous les parcours</button>
       <h1>${voteEmoji(route.id)}${route.name}${authorMark(route)}</h1>
       <p class="meta">${fmtKm(v.dist_km)} km · D+ ${v.dplus} m · ${v.moving} · ${v.difficulty.label}</p>
-      <div class="actions"><button type="button" class="btn btn-primary mobile-only" data-expand data-label="Infos">${ICONS.info}<span class="label">Infos</span></button>${actionButtons(route, v, true)}</div>`;
+      <div class="actions">${actionButtons(route, v, false)}</div>`;
     $("#back-to-list").addEventListener("click", () => openRoute(""));
     bindActions($("#detail-head"), route, v);
     $("#info").innerHTML = `
@@ -490,7 +485,7 @@
       ${btn(`a class="btn btn-primary" href="${v.gpx}" download`, ICONS.gpx, "GPX")}
       ${btn(`button type="button" class="btn" data-action="copy"`, ICONS.link, "Lien à copier")}
       ${publicMode() ? "" : btn(`button type="button" class="btn admin-only${inVote ? " is-active" : ""}" data-action="basket"`, inVote ? ICONS.minus : ICONS.plus, inVote ? "Retirer de la sélection" : "Ajouter à la sélection")}
-      ${withShare && navigator.share ? btn(`button type="button" class="btn" data-action="share"`, ICONS.share, "Partager") : ""}`;
+`;
   }
   function bindActions(root, route, v) {
     const on = (selector, handler) => { const el = $(selector, root); if (el) el.addEventListener("click", handler); };
@@ -522,7 +517,7 @@
     $("#clear-selection").hidden = !n;
     if (state.routeId) {   // le bouton Ajouter / Retirer de la fiche
       const route = ROUTE_BY_ID[state.routeId], v = route.variants[state.variantIndex];
-      const el = $("#detail-head .actions"); el.innerHTML = `<button type="button" class="btn btn-primary mobile-only" data-expand data-label="Infos">${ICONS.info}<span class="label">Infos</span></button>` + actionButtons(route, v, true); bindActions(el, route, v); updateExpandButtons();
+      const el = $("#detail-head .actions"); el.innerHTML = actionButtons(route, v, false); bindActions(el, route, v);
     }
     renderList();
     if (map.instance) restyleOverview();
@@ -591,10 +586,6 @@
     const best = SHEET_STATES.reduce((a, b) => Math.abs(sheetVisibleHeight(b) - visible) < Math.abs(sheetVisibleHeight(a) - visible) ? b : a);
     setSheet(best);
   }
-  document.addEventListener("click", e => {
-    if (e.target.closest("[data-expand]")) { e.stopPropagation(); setSheet("open"); }
-    else if (e.target.closest("[data-collapse]")) { e.stopPropagation(); setSheet("half"); }
-  }, true);
   $$("#sheet-handle, .panel-head").forEach(el => {
     el.addEventListener("touchstart", e => dragStart(e.touches[0].clientY), { passive: true });
     el.addEventListener("touchmove", e => { dragMove(e.touches[0].clientY); if (drag.moved) e.preventDefault(); }, { passive: false });
