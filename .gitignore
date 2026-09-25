@@ -1,0 +1,7 @@
+# export Strava brut : données personnelles, ne jamais publier
+export_*/
+*.fit.gz
+.DS_Store
+
+# outils de génération et catalogue (identifiants d'activités Strava) : non publiés
+build/

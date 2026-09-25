@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>TCAP · Parcours</title>
+  <meta name="description" content="Les parcours du club TCAP : carte, profil, dénivelé, durée indicative et trace GPX.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="assets/logo-96.png">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <button type="button" class="icon-btn desktop-only" id="toggle-list" aria-label="Liste des parcours" aria-expanded="true">☰</button>
+  <a class="brand" href="./" id="brand">
+    <img src="assets/logo-96.png" alt="" width="40" height="33">
+    <span class="brand-name">TCAP</span><span class="brand-sub">Parcours</span>
+  </a>
+  <div class="topbar-title" id="topbar-title"></div>
+  <button type="button" class="icon-btn desktop-only" id="toggle-info" aria-label="Infos du parcours" aria-expanded="false">ⓘ</button>
+</header>
+
+<nav class="tabs mobile-only" aria-label="Vues">
+  <button type="button" class="tab" data-tab="list">Liste <span class="tab-count" id="tab-list-count"></span></button>
+  <button type="button" class="tab is-active" data-tab="map">Carte</button>
+</nav>
+
+<main class="main">
+
+  <!-- Panneau liste : filtres + parcours -->
+  <aside class="panel panel-list" id="panel-list">
+    <div class="panel-head desktop-only">
+      <strong>Parcours</strong>
+      <button type="button" class="close" data-close="list" aria-label="Fermer">×</button>
+    </div>
+    <div class="panel-body">
+      <div class="list-toolbar mobile-only">
+        <span id="count-mobile"></span>
+        <button type="button" class="btn btn-sm" id="toggle-filters" aria-expanded="false">Filtres<span class="badge" id="filters-badge" hidden></span></button>
+      </div>
+      <form class="filters" id="filters" onsubmit="return false">
+        <label>Départ <select id="filter-start"></select></label>
+        <label>Type de séance <select id="filter-type"></select></label>
+        <label>Terrain <select id="filter-tag"></select></label>
+        <label>Trier par <select id="filter-sort"></select></label>
+        <div class="filters-foot"><span id="count-desktop"></span><button type="button" class="link-btn" id="reset-filters">Réinitialiser</button></div>
+      </form>
+      <ul class="route-list" id="route-list"></ul>
+    </div>
+  </aside>
+
+  <!-- Carte -->
+  <div class="map-area">
+    <div id="map"></div>
+    <div class="map-controls">
+      <div class="segmented" role="group" aria-label="Fond de carte">
+        <button type="button" class="segmented-btn is-active" data-mode="classic">Classique</button>
+        <button type="button" class="segmented-btn" data-mode="relief">Relief / D+</button>
+      </div>
+      <div class="slope-legend" id="slope-legend" hidden>
+        <i class="sw sw-1"></i>&lt;0 % <i class="sw sw-2"></i>0–4 <i class="sw sw-3"></i>4–8 <i class="sw sw-4"></i>8–12 <i class="sw sw-5"></i>&gt;12 %
+      </div>
+    </div>
+    <div class="map-hint desktop-only" id="map-hint">Cliquez sur un tracé ou choisissez un parcours dans la liste.</div>
+    <div class="map-card mobile-only" id="map-card" hidden></div>
+  </div>
+
+  <!-- Panneau infos : panneau latéral (bureau) / modale glissante (mobile) -->
+  <div class="backdrop mobile-only" id="backdrop" hidden></div>
+  <aside class="panel panel-info" id="panel-info" hidden aria-label="Infos du parcours">
+    <div class="panel-head">
+      <strong>Infos</strong>
+      <button type="button" class="close" data-close="info" aria-label="Fermer">×</button>
+    </div>
+    <div class="panel-body info" id="info"></div>
+  </aside>
+
+</main>
+
+<div class="toast" id="toast" hidden></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="data/routes.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
