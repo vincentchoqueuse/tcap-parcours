@@ -28,7 +28,7 @@ body {
 a { color: var(--green-700); }
 button, select, input { font: inherit; }
 [hidden] { display: none !important; }
-@media (min-width: 761px) { .mobile-only { display: none !important; } #count-desktop { display: none; } }
+@media (min-width: 701px) { .mobile-only { display: none !important; } #count-desktop { display: none; } }
 
 /* ---------- boutons ---------- */
 .btn {
@@ -218,9 +218,9 @@ body.mode-vote .admin-only { display: none !important; }
 .toast { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%); z-index: 100; padding: 9px 16px; background: var(--slate-900); color: #fff; border-radius: 10px; box-shadow: var(--shadow-lg); font-size: 13px; }
 
 /* ==========================================================================
-   MOBILE (≤ 760 px, téléphones ; les tablettes gardent la disposition bureau) : carte plein écran, panneau en feuille inférieure (repliée / dépliée)
+   MOBILE (≤ 700 px, téléphones ; les tablettes gardent la disposition bureau) : carte plein écran, panneau en feuille inférieure (repliée / dépliée)
    ========================================================================== */
-@media (max-width: 760px) {
+@media (max-width: 700px) {
   .desktop-only { display: none !important; }
   .mobile-only { display: block; }
   .topbar { padding: 0 12px; }
@@ -233,7 +233,7 @@ body.mode-vote .admin-only { display: none !important; }
 
   /* feuille inférieure : 3 positions (repliée / moitié / dépliée), position calculée par le script (transform) */
   .panel {
-    position: absolute; left: 0; right: 0; bottom: 0; width: auto; height: 88%; z-index: 20;
+    position: absolute; left: 0; right: 0; bottom: 0; width: auto; height: min(88%, 640px); z-index: 20;
     border: 0; border-radius: 18px 18px 0 0; box-shadow: 0 -6px 24px rgba(15, 23, 42, .18);
     transition: transform .3s cubic-bezier(.2, .8, .2, 1);
   }
@@ -252,4 +252,4 @@ body.mode-vote .admin-only { display: none !important; }
 }
 @media (max-width: 380px) { .filters { grid-template-columns: 1fr; } }
 /* tablette en portrait : colonne un peu plus étroite pour laisser de la place à la carte */
-@media (min-width: 761px) and (max-width: 1024px) { .panel { flex-basis: var(--panel-w-tablet); width: var(--panel-w-tablet); } }
+@media (min-width: 701px) and (max-width: 1024px) { .panel { flex-basis: var(--panel-w-tablet); width: var(--panel-w-tablet); } }
