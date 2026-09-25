@@ -11,39 +11,58 @@
   /* ---------- données et constantes ---------- */
   const ROUTES = window.ROUTES || [];
   const ROUTE_BY_ID = Object.fromEntries(ROUTES.map(r => [r.id, r]));
+  const ROUTE_BY_NUM = Object.fromEntries(ROUTES.map(r => [String(r.num), r]));
+  const resolveId = x => ROUTE_BY_NUM[x] ? ROUTE_BY_NUM[x].id : x;   // accepte le numéro court ou le slug
   const TYPES = [
     ["trail", "Trail"], ["endurance", "Endurance"], ["fractionné", "Fractionné"],
-    ["côtes", "Côtes"], ["seuil", "Seuil"], ["course", "Course"],
+    ["côtes", "Côtes"], ["seuil", "Seuil"], ["course", "Course"], ["ultra", "Ultra"],
   ];
   const TYPE_LABEL = Object.fromEntries(TYPES);
-  const TAG_ORDER = ["GR34", "littoral", "intérieur", "mixte", "plat", "route", "court", "sortie longue", "départ déporté", "parcours de course"];
-  const HIDDEN_TAGS = new Set(["semaine", "séance"]);
-  const DEFAULTS = { start: "keralaurent", type: "tous", tag: "tous", sort: "dist" };
+  const TAG_ORDER = ["GR34", "littoral", "intérieur", "mixte", "plat", "route", "court", "sortie longue", "départ déporté", "parcours de course", "en ligne", "Short Orange"];
+  const HIDDEN_TAGS = new Set(["semaine", "séance", "Short Orange"]);
+  const DIST_MAX = Math.max(10, Math.ceil(Math.max(...ROUTES.map(r => r.dist_km), 0) / 5) * 5);
+  const DEFAULTS = { start: "keralaurent", type: "tous", tag: "tous", sort: "dist", dmin: 0, dmax: DIST_MAX };
+  const FILTER_KEYS = ["start", "type", "tag", "sort", "dmin", "dmax"];
+  // Les traceurs maison : une petite chèvre discrète à côté du titre
+  const AUTHORS = { "Short Orange": { emoji: "🐐", title: "Tracé par Short Orange, the GOAT" } };
   const TRACK_COLOR = "#4f46e5";
+  const SELECTION_COLORS = ["#4f46e5", "#dc2626", "#059669", "#d97706", "#7c3aed", "#0891b2", "#db2777", "#65a30d", "#ea580c", "#0f766e"];
+  const VOTE_EMOJIS = ["👍", "❤️", "😂", "😮", "😢", "🙏", "🔥", "💪", "🎉", "👀"];   // les 6 premiers sont les réactions rapides de WhatsApp
   const ICONS = {
     gpx: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 19h16"/></svg>',
     link: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>',
     share: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>',
+    plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+    minus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14"/></svg>',
+    whatsapp: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 12 12 0 0 0 4.6 4c.6.3 1.1.4 1.5.6.6.2 1.2.2 1.6.1.5-.1 1.5-.6 1.7-1.2s.2-1.1.2-1.2-.3-.2-.5-.3z"/></svg>',
+    basket: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h18v8H3z"/><path d="M7 12V5h10v7"/><path d="M10 8.5h4"/><path d="M6 12h12"/></svg>',
+    info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>',
     chef: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21h10"/><path d="M7 21v-6"/><path d="M17 21v-6"/><path d="M6 15h12"/><path d="M6 15V9.5a2.5 2.5 0 0 1-1-4.6A3 3 0 0 1 9.3 3a3.5 3.5 0 0 1 5.4 0 3 3 0 0 1 4.3 1.9 2.5 2.5 0 0 1-1 4.6V15"/></svg>',
   };
 
   /* ---------- état ---------- */
   const query = new URLSearchParams(location.search);
+  const initialIds = idsFromUrl();
   const state = {
-    start: query.get("start") || DEFAULTS.start,
+    start: query.get("start") || (initialIds.length ? "tous" : DEFAULTS.start),   // une sélection partagée ne doit pas être masquée par le filtre de départ
     type: query.get("type") || DEFAULTS.type,
     tag: query.get("tag") || DEFAULTS.tag,
     sort: query.get("sort") || DEFAULTS.sort,
+    dmin: clampKm(query.get("dmin"), DEFAULTS.dmin),
+    dmax: clampKm(query.get("dmax"), DEFAULTS.dmax),
     mode: query.get("mode") === "relief" ? "relief" : "classic",
+    ids: initialIds,        // sélection partagée (?ids=3,12,27) : filtre de base, les autres filtres s'appliquent par-dessus
     routeId: "",
     variantIndex: 0,
-    tab: "map",            // mobile : "list" | "map"
-    listOpen: true,        // bureau
-    infoOpen: false,       // bureau : panneau ; mobile : modale
+    sheet: "peek",         // mobile : feuille inférieure "peek" (en-tête seul), "half" (moitié) ou "open" (dépliée)
   };
   const map = { instance: null, base: null, overview: null, overviewLines: {}, track: null, slope: null, extras: null, cursor: null };
 
   /* ---------- utilitaires ---------- */
+  function clampKm(value, fallback) {
+    const n = Number(value);
+    return value === null || value === "" || !Number.isFinite(n) ? fallback : Math.max(0, Math.min(DIST_MAX, Math.round(n)));
+  }
   const $ = (selector, root) => (root || document).querySelector(selector);
   const $$ = (selector, root) => [...(root || document).querySelectorAll(selector)];
   const isMobile = () => window.matchMedia("(max-width: 900px)").matches;
@@ -51,6 +70,8 @@
   const fmtKm = km => km.toLocaleString("fr-FR");
   const routeUrl = id => location.origin + location.pathname.replace(/index\.html$/, "") + "?id=" + id;
   const visibleTags = tags => tags.filter(t => !HIDDEN_TAGS.has(t));
+  const authorOf = route => AUTHORS[route.author];
+  const authorMark = route => authorOf(route) ? ` <span class="author-mark" title="${authorOf(route).title}" aria-label="${authorOf(route).title}">${authorOf(route).emoji}</span>` : "";
 
   function haversine(a, b) {
     const R = 6371000, k = Math.PI / 180;
@@ -70,58 +91,70 @@
     el.textContent = message; el.hidden = false;
     clearTimeout(toast.timer); toast.timer = setTimeout(() => { el.hidden = true; }, 1800);
   }
-  async function copyToClipboard(text) {
+  async function copyToClipboard(text, message) {
     try { await navigator.clipboard.writeText(text); }
     catch (err) {
-      const input = document.createElement("input");
+      const input = document.createElement("textarea");
       input.value = text; document.body.appendChild(input); input.select(); document.execCommand("copy"); input.remove();
     }
-    toast("Lien copié");
+    toast(message || "Lien copié");
   }
 
   /* ---------- URL ---------- */
   function buildQuery(routeId) {
     const q = new URLSearchParams();
-    for (const key of ["start", "type", "tag", "sort"]) if (state[key] !== DEFAULTS[key]) q.set(key, state[key]);
+    for (const key of FILTER_KEYS) if (state[key] !== DEFAULTS[key]) q.set(key, state[key]);
     if (state.mode === "relief") q.set("mode", "relief");
+    if (state.ids.length) q.set("ids", numsOf(trashOrder(state.ids)));
     if (routeId) q.set("id", routeId);
     const s = q.toString();
     return s ? "?" + s : location.pathname;
   }
   const syncUrl = () => history.replaceState({ id: state.routeId }, "", buildQuery(state.routeId));
-  const idFromUrl = () => new URLSearchParams(location.search).get("id") || location.hash.slice(1);
+  const idFromUrl = () => resolveId(new URLSearchParams(location.search).get("id") || location.hash.slice(1));
+  function idsFromUrl() {
+    const raw = new URLSearchParams(location.search).get("ids") || "";
+    return [...new Set(raw.split(",").map(x => resolveId(x.trim())).filter(id => ROUTE_BY_ID[id]))];
+  }
+  const numsOf = ids => ids.map(id => ROUTE_BY_ID[id].num).join(",");
+  const trashOrder = ids => ids.slice().sort((a, b) => ROUTE_BY_ID[b].difficulty.km_effort - ROUTE_BY_ID[a].difficulty.km_effort);
+  const selectionMode = () => state.ids.length > 0;
+  const publicMode = selectionMode;   // niveau public : la sélection reçue par lien, sans filtres ni panier
+  const voteEmoji = id => selectionMode() ? `<span class="vote-emoji" aria-hidden="true">${VOTE_EMOJIS[selectionIndex(id)] || selectionIndex(id) + 1}</span>` : "";
+  function applyMode() { document.body.classList.toggle("mode-vote", publicMode()); }
+  const selectionIndex = id => trashOrder(state.ids).indexOf(id);
+  const routesUrl = ids => location.origin + location.pathname.replace(/index\.html$/, "") + "?ids=" + numsOf(ids);
 
   /* ---------- disposition : panneaux, onglets, modale ---------- */
+  const SHEET_STATES = ["peek", "half", "open"];
+  function sheetVisibleHeight(state_) {
+    const panel = $("#panel"), main = $(".main");
+    const head = $(state.routeId ? "#detail-head" : "#list-view .panel-head");
+    if (state_ === "open") return panel.offsetHeight;
+    if (state_ === "half") return Math.round(main.offsetHeight * 0.5);
+    return head.offsetHeight + 22;   // 22 px : poignée
+  }
+  function applySheet(animate) {
+    const panel = $("#panel");
+    if (!isMobile()) { panel.style.transform = ""; return; }
+    panel.style.transition = animate === false ? "none" : "";
+    panel.style.transform = `translateY(${panel.offsetHeight - sheetVisibleHeight(state.sheet)}px)`;
+  }
   function applyLayout() {
-    const mobile = isMobile();
-    const listVisible = mobile ? state.tab === "list" : state.listOpen;
-    $("#panel-list").hidden = !listVisible;
-    $("#toggle-list").setAttribute("aria-expanded", String(state.listOpen));
-    document.body.classList.toggle("list-closed", !state.listOpen);
-
-    const info = $("#panel-info");
-    if (mobile) {
-      info.hidden = false;
-      info.classList.toggle("is-open", state.infoOpen);
-      $("#backdrop").hidden = !state.infoOpen;
-    } else {
-      info.hidden = !state.infoOpen;
-      info.classList.remove("is-open");
-      $("#backdrop").hidden = true;
-    }
-    $("#toggle-info").setAttribute("aria-expanded", String(state.infoOpen));
-    document.body.classList.toggle("info-closed", !state.infoOpen);
-
-    $$(".tab").forEach(t => t.classList.toggle("is-active", t.dataset.tab === state.tab));
-    $("#map-card").hidden = !(mobile && state.routeId && state.tab === "map");
-    setTimeout(() => map.instance && map.instance.invalidateSize(), 30);
+    const hasRoute = !!state.routeId;
+    $("#list-view").hidden = hasRoute;
+    $("#detail-view").hidden = !hasRoute;
+    $("#map-hint").hidden = hasRoute;
+    applySheet(); updateExpandButtons();
+    if (map.instance) { map.instance.invalidateSize(); setTimeout(() => { map.instance.invalidateSize(); if (!isMobile() || state.sheet !== "open") fitCurrent(); }, 320); }
   }
-  function setInfoOpen(open) { state.infoOpen = open; applyLayout(); }
-  function setListOpen(open) { state.listOpen = open; applyLayout(); }
-  function setTab(tab) {
-    state.tab = tab; applyLayout();
-    if (tab === "map") fitCurrent();
+  function setSheet(mode) { state.sheet = mode; applyLayout(); }
+  function updateExpandButtons() {
+    const open = isMobile() && state.sheet === "open";
+    $$("[data-expand]").forEach(b => { b.hidden = open; });
+    $$("[data-collapse]").forEach(b => { b.hidden = !open; });
   }
+  function setInfoOpen(open) { setSheet(open ? "open" : "half"); }
 
   /* ---------- filtres et liste ---------- */
   function fillSelect(el, options, current) {
@@ -137,8 +170,26 @@
     const tags = [...tagCounts.keys()].sort((a, b) => rank(a) - rank(b)).map(t => [t, `${t} (${tagCounts.get(t)})`]);
     fillSelect($("#filter-tag"), [["tous", "Tous"], ...tags], state.tag);
     fillSelect($("#filter-sort"), [["dist", "Distance"], ["dplus", "D+"], ["time", "Durée"], ["diff", "Difficulté"], ["name", "Nom"]], state.sort);
+    renderRange();
+  }
+  function renderRange() {
+    const min = $("#range-min"), max = $("#range-max");
+    min.max = max.max = DIST_MAX;
+    min.value = state.dmin; max.value = state.dmax;
+    const pct = v => (v / DIST_MAX) * 100;
+    $("#range-fill").style.left = pct(state.dmin) + "%";
+    $("#range-fill").style.right = (100 - pct(state.dmax)) + "%";
+    $("#range-value").textContent = state.dmin === DEFAULTS.dmin && state.dmax === DEFAULTS.dmax ? "toutes" : `${state.dmin} – ${state.dmax} km`;
+  }
+  function onRangeInput(which, value) {
+    const v = clampKm(value, DEFAULTS[which]);
+    if (which === "dmin") state.dmin = Math.min(v, state.dmax);
+    else state.dmax = Math.max(v, state.dmin);
+    renderRange();
+    onFilterChange();
   }
   function filteredRoutes() {
+    const base = selectionMode() ? state.ids.map(id => ROUTE_BY_ID[id]) : ROUTES;
     const comparators = {
       dist: (a, b) => a.dist_km - b.dist_km,
       dplus: (a, b) => b.dplus - a.dplus,
@@ -146,30 +197,32 @@
       diff: (a, b) => b.difficulty.km_effort - a.difficulty.km_effort,
       name: (a, b) => a.name.localeCompare(b.name, "fr"),
     };
-    return ROUTES
+    return base
       .filter(r => (state.start === "tous" || r.start_group === state.start)
         && (state.type === "tous" || r.type === state.type)
-        && (state.tag === "tous" || r.tags.includes(state.tag)))
+        && (state.tag === "tous" || r.tags.includes(state.tag))
+        && r.dist_km >= state.dmin - 0.5 && r.dist_km <= state.dmax + 0.5)
       .sort(comparators[state.sort] || comparators.dist);
   }
   function renderList() {
     const routes = filteredRoutes();
+    const selection = selectionMode();
     $("#route-list").innerHTML = routes.map(r => `
-      <li class="${r.id === state.routeId ? "is-selected" : ""}" data-id="${r.id}"><button type="button">
-        <div class="name">${r.name}</div>
+      <li class="${r.id === state.routeId ? "is-selected" : ""}${inBasket(r.id) ? " in-basket" : ""}" data-id="${r.id}">
+        ${selection ? "" : `<button type="button" class="check admin-only${inBasket(r.id) ? " is-on" : ""}" data-select="${r.id}" role="checkbox" aria-checked="${inBasket(r.id)}" aria-label="Sélectionner pour le sondage"></button>`}
+        <button type="button" class="row">
+        <div class="name">${voteEmoji(r.id)}${r.name}</div>
         <div class="meta">
-          <span class="type ${typeClass(r.type)}">${TYPE_LABEL[r.type]}</span>
-          <span>${fmtKm(r.dist_km)} km</span><span>D+ ${r.dplus} m</span><span>${r.moving}</span>
-          <span class="pill level-${r.difficulty.level}">${r.difficulty.label}</span>
+          <span>${fmtKm(r.dist_km)} km</span><span>D+ ${r.dplus} m</span><span>${r.moving}</span><span class="level-text">${r.difficulty.label}</span>
         </div>
       </button></li>`).join("") || `<li class="empty">Aucun parcours avec ces filtres.</li>`;
-    $$("#route-list li[data-id] button").forEach(b => b.addEventListener("click", () => openRoute(b.parentElement.dataset.id)));
+    $$("#route-list li[data-id] .row").forEach(b => b.addEventListener("click", () => openRoute(b.parentElement.dataset.id)));
+    $$("#route-list [data-select]").forEach(b => b.addEventListener("click", e => { e.stopPropagation(); toggleBasket(b.dataset.select); }));
 
-    const label = `${routes.length} parcours`;
+    const label = selection ? `Vote : ${routes.length} parcours, réagis sur WhatsApp` : `${routes.length} parcours`;
     $("#count-desktop").textContent = label;
     $("#count-mobile").textContent = label;
-    $("#tab-list-count").textContent = `(${routes.length})`;
-    const activeFilters = ["start", "type", "tag"].filter(k => state[k] !== DEFAULTS[k]).length;
+    const activeFilters = ["start", "type", "tag"].filter(k => state[k] !== DEFAULTS[k]).length + (state.dmin !== DEFAULTS.dmin || state.dmax !== DEFAULTS.dmax ? 1 : 0) + (selection ? 1 : 0);
     $("#filters-badge").hidden = !activeFilters;
     $("#filters-badge").textContent = activeFilters;
 
@@ -179,30 +232,48 @@
       if (visible.has(id) && !map.overview.hasLayer(line)) map.overview.addLayer(line);
       if (!visible.has(id) && map.overview.hasLayer(line)) map.overview.removeLayer(line);
     });
+    restyleOverview();
+  }
+  function setSelection(ids) {
+    state.ids = ids.filter(id => ROUTE_BY_ID[id]);
+    if (state.ids.length) Object.assign(state, DEFAULTS, { start: "tous" });   // aucun filtre ne doit cacher un parcours de la sélection
+    renderFilters(); renderList();
+    syncUrl();
+    if (!state.routeId) fitOverview();
   }
   function onFilterChange() { renderList(); syncUrl(); if (!state.routeId) fitOverview(); }
-  function resetFilters() { Object.assign(state, DEFAULTS); renderFilters(); onFilterChange(); }
+  function resetFilters() { Object.assign(state, DEFAULTS); state.ids = []; renderFilters(); onFilterChange(); }
 
   /* ---------- carte ---------- */
   const osmLayer = () => L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap contributors" });
   const topoLayer = () => L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", { maxZoom: 17, attribution: "© OpenStreetMap contributors, SRTM · © OpenTopoMap (CC-BY-SA)" });
-  const overviewStyle = () => state.routeId ? { color: "#94a3b8", weight: 2, opacity: .45 } : { color: "#64748b", weight: 3, opacity: .6 };
+  function overviewStyle(id) {
+    if (selectionMode() && state.ids.includes(id)) {
+      const color = SELECTION_COLORS[selectionIndex(id) % SELECTION_COLORS.length];
+      return state.routeId && state.routeId !== id ? { color, weight: 3, opacity: .5 } : { color, weight: 4, opacity: .9 };
+    }
+    if (!selectionMode() && inBasket(id)) {   // parcours cochés : en vert du club pour les repérer
+      return state.routeId && state.routeId !== id ? { color: "#16a34a", weight: 3, opacity: .6 } : { color: "#16a34a", weight: 4, opacity: .9 };
+    }
+    return state.routeId ? { color: "#94a3b8", weight: 2, opacity: .45 } : { color: "#64748b", weight: 3, opacity: .6 };
+  }
 
   function initMap() {
     map.instance = L.map("map").setView([48.36, -4.66], 12);
     map.overview = L.layerGroup().addTo(map.instance);
     ROUTES.forEach(r => {
-      const line = L.polyline(r.variants[0].track.map(p => [p[0], p[1]]), overviewStyle());
+      const line = L.polyline(r.variants[0].track.map(p => [p[0], p[1]]), overviewStyle(r.id));
       line.bindTooltip(`${r.name} · ${fmtKm(r.dist_km)} km · D+ ${r.dplus} m`, { sticky: true });
       line.on("click", () => openRoute(r.id));
       line.on("mouseover", () => line.setStyle({ color: TRACK_COLOR, weight: 5, opacity: 1 }));
-      line.on("mouseout", () => line.setStyle(overviewStyle()));
+      line.on("mouseout", () => line.setStyle(overviewStyle(r.id)));
       map.overviewLines[r.id] = line;
       map.overview.addLayer(line);
     });
     setMode(state.mode);
   }
-  function restyleOverview() { Object.values(map.overviewLines).forEach(l => l.setStyle(overviewStyle())); }
+  function restyleOverview() { Object.entries(map.overviewLines).forEach(([id, l]) => l.setStyle(overviewStyle(id))); }
+
   function setMode(mode) {
     state.mode = mode;
     $$(".segmented-btn").forEach(b => b.classList.toggle("is-active", b.dataset.mode === mode));
@@ -216,16 +287,17 @@
     $("#slope-legend").hidden = mode !== "relief";
   }
   function fitPadding() {
-    if (isMobile()) return { paddingTopLeft: [20, 64], paddingBottomRight: [20, state.routeId ? 96 : 20] };
-    const css = getComputedStyle(document.documentElement);
-    const listW = parseInt(css.getPropertyValue("--panel-list-w")) + 24;
-    const infoW = parseInt(css.getPropertyValue("--panel-info-w")) + 24;
-    return { paddingTopLeft: [state.listOpen ? listW : 24, 24], paddingBottomRight: [state.infoOpen ? infoW : 24, 24] };
+    if (isMobile()) return { paddingTopLeft: [20, 64], paddingBottomRight: [20, sheetVisibleHeight(state.sheet) + 16] };
+    return { paddingTopLeft: [24, 24], paddingBottomRight: [24, 24] };   // la carte a déjà la largeur libre entre les panneaux
   }
+  const HOME = L.latLng(48.370, -4.640);   // Keralaurent, point de rendez-vous du club
   function fitOverview() {
-    const bounds = L.latLngBounds();
-    Object.values(map.overviewLines).forEach(l => { if (map.overview.hasLayer(l)) bounds.extend(l.getBounds()); });
-    if (bounds.isValid()) map.instance.fitBounds(bounds, { ...fitPadding(), animate: false });
+    if (selectionMode()) {   // lien ?ids= : cadrer la sélection
+      const bounds = L.latLngBounds();
+      Object.values(map.overviewLines).forEach(l => { if (map.overview.hasLayer(l)) bounds.extend(l.getBounds()); });
+      if (bounds.isValid()) { map.instance.fitBounds(bounds, { ...fitPadding(), animate: false }); return; }
+    }
+    map.instance.fitBounds(HOME.toBounds(7000), { ...fitPadding(), animate: false });   // vue par défaut : 7 km autour de Keralaurent
   }
   function fitCurrent() {
     if (map.track) map.instance.fitBounds(map.track.getBounds(), { ...fitPadding(), animate: false });
@@ -358,7 +430,10 @@
     const list = climbs.length
       ? `<ul class="climbs">${climbs.map(c => `<li><span class="km">km ${c.from_km} → ${c.to_km}</span><span class="gain">+${c.gain} m</span><span class="detail">${c.len_m >= 1000 ? (c.len_m / 1000).toFixed(1) + " km" : c.len_m + " m"} · ${c.pct} %</span></li>`).join("")}</ul>`
       : `<p class="hint">Aucune montée notable (moins de 30 m de gain d'un coup).</p>`;
-    return `<p>${text}</p><p class="hint">D+ ${v.dplus} m · D- ${v.dminus} m · altitude de ${v.alt_min} à ${v.alt_max} m (altimètre barométrique).</p>${list}`;
+    const source = v.source === "gpx"
+      ? "altitudes du modèle de terrain, tracé dessiné et non enregistré : une montre GPS annoncera sans doute 20 à 30 % de D+ en plus"
+      : "altimètre barométrique";
+    return `<p>${text}</p><p class="hint">D+ ${v.dplus} m · D- ${v.dminus} m · altitude de ${v.alt_min} à ${v.alt_max} m (${source}).</p>${list}`;
   }
   function terrainText(v) {
     const lines = [];
@@ -366,22 +441,29 @@
     else lines.push(`Aucune pente forte : ${v.max_grade} % au maximum sur 100 m.`);
     if (v.longest_climb && v.longest_climb.len_m >= 400) lines.push(`Montée la plus longue : ${(v.longest_climb.len_m / 1000).toFixed(1)} km pour +${v.longest_climb.gain} m (km ${v.longest_climb.from_km}).`);
     if (v.biggest_climb && (!v.longest_climb || v.biggest_climb.from_km !== v.longest_climb.from_km)) lines.push(`Plus gros dénivelé d'un coup : +${v.biggest_climb.gain} m sur ${v.biggest_climb.len_m} m (km ${v.biggest_climb.from_km}, ${v.biggest_climb.pct} %).`);
-    lines.push(`Durée indicative de ${v.moving} en sortie club (allure tranquille, pauses non comprises).`);
+    lines.push(v.estimated
+      ? `Durée estimée à ${v.moving} : tracé jamais chronométré en groupe, calcul à l'allure club habituelle (pauses et ravitos non compris${v.dist_km >= 40 ? ", et sur cette distance la marge est large" : ""}).`
+      : `Durée indicative de ${v.moving} en sortie club (allure tranquille, pauses non comprises).`);
     return lines.map(l => `<p>${l}</p>`).join("");
   }
   function renderInfo(route, variantIndex) {
     const v = route.variants[variantIndex];
     const stat = (value, unit, label) => `<div class="stat"><div class="stat-value">${value}${unit ? `<small>${unit}</small>` : ""}</div><div class="stat-label">${label}</div></div>`;
+    $("#detail-head").innerHTML = `
+      <div class="head-row"><button type="button" class="back" id="back-to-list">← Tous les parcours</button><button type="button" class="close mobile-only" data-collapse aria-label="Fermer la fiche">×</button></div>
+      <h1>${voteEmoji(route.id)}${route.name}${authorMark(route)}</h1>
+      <p class="meta">${fmtKm(v.dist_km)} km · D+ ${v.dplus} m · ${v.moving} · ${v.difficulty.label}</p>
+      <div class="actions"><button type="button" class="btn btn-primary mobile-only" data-expand data-label="Infos">${ICONS.info}<span class="label">Infos</span></button>${actionButtons(route, v, true)}</div>`;
+    $("#back-to-list").addEventListener("click", () => openRoute(""));
+    bindActions($("#detail-head"), route, v);
     $("#info").innerHTML = `
       <div class="tags"><span class="type ${typeClass(route.type)}">${TYPE_LABEL[route.type]}</span>${visibleTags(route.tags).map(t => `<span class="tag">${t}</span>`).join("")}</div>
-      <h1>${route.name}</h1>
       <p class="start">Départ : ${route.start}</p>
-      <div class="actions">${actionButtons(route, v, false)}</div>
       ${route.variants.length > 1 ? `<div class="variants">${route.variants.map((x, i) => `<button type="button" class="chip${i === variantIndex ? " is-active" : ""}" data-variant="${i}">${x.label}</button>`).join("")}</div>` : ""}
       <div class="stats">
         ${stat(fmtKm(v.dist_km), "km", "Distance")}
         ${stat("+" + v.dplus, "m", "Dénivelé positif")}
-        ${stat(v.moving, "", "Durée indicative")}
+        ${stat((v.estimated ? "≈ " : "") + v.moving, "", v.estimated ? "Durée estimée" : "Durée indicative")}
         ${stat("-" + v.dminus, "m", "Dénivelé négatif")}
         ${stat(v.alt_max, "m", "Altitude max")}
         ${stat(`<span class="pill level-${v.difficulty.level}">${v.difficulty.label}</span>`, "", `${v.difficulty.km_effort} km-effort`)}
@@ -399,33 +481,63 @@
       ${terrainText(v)}
       <p class="credits">Fonds de carte © OpenStreetMap contributors · relief © OpenTopoMap (CC-BY-SA).</p>`;
     $$("#info [data-variant]").forEach(b => b.addEventListener("click", () => selectRoute(route.id, Number(b.dataset.variant))));
-    bindActions($("#info"), route, v);
     renderProfile(v);
   }
-  function renderTopbar(route, v) {
-    $("#topbar-title").textContent = route ? `${route.name} · ${fmtKm(v.dist_km)} km · D+ ${v.dplus} m · ${v.moving}` : "";
-  }
-  function actionButtons(route, v, compact) {
-    const label = text => compact ? "" : `<span class="label">${text}</span>`;
+  function actionButtons(route, v, withShare) {
+    const btn = (attrs, icon, text) => `<${attrs} title="${text}" aria-label="${text}">${icon}<span class="label">${text.split(" ")[0]}</span></${attrs.split(" ")[0]}>`;
+    const inVote = inBasket(route.id);
     return `
-      <a class="btn btn-primary" href="${v.gpx}" download title="Télécharger la trace GPX">${ICONS.gpx}${label("GPX")}</a>
-      <button type="button" class="btn" data-action="copy" title="Copier le lien">${ICONS.link}${label("Copier le lien")}</button>
-      ${navigator.share ? `<button type="button" class="btn" data-action="share" title="Partager">${ICONS.share}${label("Partager")}</button>` : ""}`;
+      ${btn(`a class="btn btn-primary" href="${v.gpx}" download`, ICONS.gpx, "GPX")}
+      ${btn(`button type="button" class="btn" data-action="copy"`, ICONS.link, "Lien à copier")}
+      ${publicMode() ? "" : btn(`button type="button" class="btn admin-only${inVote ? " is-active" : ""}" data-action="basket"`, inVote ? ICONS.minus : ICONS.plus, inVote ? "Retirer de la sélection" : "Ajouter à la sélection")}
+      ${withShare && navigator.share ? btn(`button type="button" class="btn" data-action="share"`, ICONS.share, "Partager") : ""}`;
   }
   function bindActions(root, route, v) {
-    const copy = $('[data-action="copy"]', root);
-    if (copy) copy.addEventListener("click", () => copyToClipboard(routeUrl(route.id)));
-    const share = $('[data-action="share"]', root);
-    if (share) share.addEventListener("click", () => navigator.share({ title: route.name, text: `${route.name} · ${fmtKm(v.dist_km)} km · D+ ${v.dplus} m · ${v.moving}`, url: routeUrl(route.id) }).catch(() => {}));
+    const on = (selector, handler) => { const el = $(selector, root); if (el) el.addEventListener("click", handler); };
+    on('[data-action="copy"]', () => copyToClipboard(routeUrl(route.id)));
+    on('[data-action="share"]', () => navigator.share({ title: route.name, text: `${route.name} · ${fmtKm(v.dist_km)} km · D+ ${v.dplus} m · ${v.moving}`, url: routeUrl(route.id) }).catch(() => {}));
+    on('[data-action="basket"]', () => toggleBasket(route.id));
   }
-  function renderMapCard(route, v) {
-    $("#map-card").innerHTML = `
-      <div class="map-card-body"><div class="map-card-name">${route.name}</div><div class="map-card-meta">${fmtKm(v.dist_km)} km · D+ ${v.dplus} m · ${v.moving} · ${v.difficulty.label}</div></div>
-      <div class="map-card-actions">${actionButtons(route, v, true)}<button type="button" class="btn" id="open-info" title="Infos du parcours">ⓘ</button></div>`;
-    bindActions($("#map-card"), route, v);
-    $("#open-info").addEventListener("click", () => setInfoOpen(true));
+  /* ---------- sélection pour le vote WhatsApp ---------- */
+  const BASKET_KEY = "tcap-vote";
+  const DEFAULT_TITLE = "Sortie de la semaine : votez !";
+  const basket = { ids: [] };
+  try {
+    const saved = JSON.parse(localStorage.getItem(BASKET_KEY) || "{}");
+    basket.ids = (saved.ids || []).filter(id => ROUTE_BY_ID[id]);
+  } catch (err) { /* stockage indisponible : la sélection ne survit pas au rechargement */ }
+  const inBasket = id => basket.ids.includes(id);
+  const basketSorted = () => trashOrder(basket.ids);   // toujours du plus trash au moins trash
+  function saveBasket() { try { localStorage.setItem(BASKET_KEY, JSON.stringify({ ids: basket.ids })); } catch (err) { /* ignoré */ } }
+  function toggleBasket(id) {
+    if (inBasket(id)) { basket.ids = basket.ids.filter(x => x !== id); toast("Retiré de la sélection"); }
+    else { basket.ids.push(id); toast(`Ajouté à la sélection (${basket.ids.length})`); }
+    onBasketChange();
   }
-
+  function onBasketChange() {
+    saveBasket();
+    const n = basket.ids.length;
+    $("#share-selection").disabled = !n;
+    $("#share-selection-count").textContent = n ? ` (${n})` : "";
+    $("#clear-selection").hidden = !n;
+    if (state.routeId) {   // le bouton Ajouter / Retirer de la fiche
+      const route = ROUTE_BY_ID[state.routeId], v = route.variants[state.variantIndex];
+      const el = $("#detail-head .actions"); el.innerHTML = `<button type="button" class="btn btn-primary mobile-only" data-expand data-label="Infos">${ICONS.info}<span class="label">Infos</span></button>` + actionButtons(route, v, true); bindActions(el, route, v); updateExpandButtons();
+    }
+    renderList();
+    if (map.instance) restyleOverview();
+  }
+  function voteMessage() {
+    const ids = basketSorted();
+    const lines = [`🏃 ${DEFAULT_TITLE}`, ""];
+    ids.forEach((id, i) => {
+      const r = ROUTE_BY_ID[id];
+      lines.push(`${VOTE_EMOJIS[i] || (i + 1) + "."} ${r.name}`, `${fmtKm(r.dist_km)} km, D+ ${r.dplus} m, ${TYPE_LABEL[r.type]}`, "");
+    });
+    lines.push(`Les tracés sur la carte : ${routesUrl(ids)}`, "");
+    lines.push("Vote en réagissant à ce message avec l'emoji du parcours choisi (une seule réaction par personne).");
+    return lines.join("\n");
+  }
   /* ---------- navigation ---------- */
   function selectRoute(id, variantIndex) {
     const route = ROUTE_BY_ID[id];
@@ -435,17 +547,14 @@
     renderList();
     if (route) {
       const v = route.variants[state.variantIndex];
-      renderTopbar(route, v); renderInfo(route, state.variantIndex); renderMapCard(route, v);
-      if (isMobile()) state.tab = "map"; else state.infoOpen = true;
-      $("#map-hint").hidden = true;
+      renderInfo(route, state.variantIndex);
+      if (isMobile() && state.sheet !== "open") state.sheet = "half";   // mobile : la fiche s'ouvre à moitié, la carte reste visible
       applyLayout();
       drawRoute(v);
       const selected = $("#route-list .is-selected"); if (selected) selected.scrollIntoView({ block: "nearest" });
     } else {
-      renderTopbar(null); $("#info").innerHTML = "";
+      $("#info").innerHTML = ""; $("#detail-head").innerHTML = "";
       clearRouteLayers(); restyleOverview();
-      state.infoOpen = false;
-      $("#map-hint").hidden = false;
       applyLayout();
       fitOverview();
       if (id) toast("Parcours introuvable : " + id);
@@ -454,31 +563,77 @@
   function openRoute(id) {
     history.pushState({ id }, "", buildQuery(id));
     selectRoute(id, 0);
+    if (isMobile()) setSheet(id ? "half" : "open");
   }
 
   /* ---------- événements ---------- */
-  $("#toggle-list").addEventListener("click", () => setListOpen(!state.listOpen));
-  $("#toggle-info").addEventListener("click", () => setInfoOpen(!state.infoOpen));
-  $$("[data-close]").forEach(b => b.addEventListener("click", () => (b.dataset.close === "list" ? setListOpen(false) : setInfoOpen(false))));
-  $("#backdrop").addEventListener("click", () => setInfoOpen(false));
-  $$(".tab").forEach(t => t.addEventListener("click", () => setTab(t.dataset.tab)));
+  // mobile : toucher la poignée ou l'en-tête bascule entre moitié et dépliée ; glisser choisit la position
+  const toggleSheet = () => { if (isMobile()) setSheet(state.sheet === "open" ? "half" : "open"); };
+  const drag = { active: false, startY: 0, startOffset: 0, moved: false };
+  function dragStart(y) {
+    if (!isMobile()) return;
+    const panel = $("#panel");
+    drag.active = true; drag.moved = false; drag.startY = y;
+    drag.startOffset = panel.offsetHeight - sheetVisibleHeight(state.sheet);
+  }
+  function dragMove(y) {
+    if (!drag.active) return;
+    const panel = $("#panel"), dy = y - drag.startY;
+    if (Math.abs(dy) > 6) drag.moved = true;
+    const offset = Math.max(0, Math.min(panel.offsetHeight - sheetVisibleHeight("peek"), drag.startOffset + dy));
+    panel.style.transition = "none"; panel.style.transform = `translateY(${offset}px)`;
+  }
+  function dragEnd(y) {
+    if (!drag.active) return;
+    drag.active = false;
+    if (!drag.moved) return;   // simple toucher : géré par le clic
+    const panel = $("#panel"), visible = panel.offsetHeight - Math.max(0, drag.startOffset + (y - drag.startY));
+    const best = SHEET_STATES.reduce((a, b) => Math.abs(sheetVisibleHeight(b) - visible) < Math.abs(sheetVisibleHeight(a) - visible) ? b : a);
+    setSheet(best);
+  }
+  document.addEventListener("click", e => {
+    if (e.target.closest("[data-expand]")) { e.stopPropagation(); setSheet("open"); }
+    else if (e.target.closest("[data-collapse]")) { e.stopPropagation(); setSheet("half"); }
+  }, true);
+  $$("#sheet-handle, .panel-head").forEach(el => {
+    el.addEventListener("touchstart", e => dragStart(e.touches[0].clientY), { passive: true });
+    el.addEventListener("touchmove", e => { dragMove(e.touches[0].clientY); if (drag.moved) e.preventDefault(); }, { passive: false });
+    el.addEventListener("touchend", e => dragEnd(e.changedTouches[0].clientY));
+    el.addEventListener("click", e => { if (drag.moved) { drag.moved = false; return; } if (!e.target.closest("button, a, select, input")) toggleSheet(); });
+  });
+  // Partager : feuille de partage native (WhatsApp, etc.) ; sinon copie du message
+  $("#share-selection").addEventListener("click", async () => {
+    const text = voteMessage();
+    if (navigator.share) {
+      try { await navigator.share({ text }); return; } catch (err) { if (err.name === "AbortError") return; }
+    }
+    copyToClipboard(text, "Message copié, colle-le dans WhatsApp");
+  });
+  $("#clear-selection").addEventListener("click", () => { basket.ids = []; onBasketChange(); toast("Sélection vidée"); });
   $$(".segmented-btn").forEach(b => b.addEventListener("click", () => { setMode(b.dataset.mode); syncUrl(); }));
   $("#toggle-filters").addEventListener("click", () => {
     const open = !document.body.classList.contains("filters-open");
     document.body.classList.toggle("filters-open", open);
     $("#toggle-filters").setAttribute("aria-expanded", String(open));
+    if (open) setSheet("open");
   });
   for (const key of ["start", "type", "tag", "sort"]) $(`#filter-${key}`).addEventListener("change", e => { state[key] = e.target.value; onFilterChange(); });
+  $("#range-min").addEventListener("input", e => onRangeInput("dmin", e.target.value));
+  $("#range-max").addEventListener("input", e => onRangeInput("dmax", e.target.value));
   $("#reset-filters").addEventListener("click", resetFilters);
   $("#brand").addEventListener("click", e => { e.preventDefault(); openRoute(""); });
-  window.addEventListener("popstate", () => selectRoute(idFromUrl(), 0));
+  window.addEventListener("popstate", () => { state.ids = idsFromUrl(); applyMode(); renderList(); selectRoute(idFromUrl(), 0); });
   let resizeTimer;
-  window.addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(applyLayout, 100); });
+  window.addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { $("#panel").style.transition = "none"; applyLayout(); }, 100); });
 
   /* ---------- démarrage ---------- */
   const initialId = idFromUrl();
   initMap();
   renderFilters();
-  state.tab = initialId ? "map" : "list";
+  onBasketChange();
+  applyMode();
+  state.sheet = query.get("sheet") === "open" ? "open" : initialId ? "half" : "open";   // mobile : liste dépliée à l'arrivée ; fiche à moitié (ou dépliée avec &sheet=open)
+  document.body.classList.add("no-anim");   // pas de glissement des panneaux au chargement
   selectRoute(initialId, 0);
+  setTimeout(() => document.body.classList.remove("no-anim"), 400);
 })();

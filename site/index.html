@@ -15,43 +15,17 @@
 <body>
 
 <header class="topbar">
-  <button type="button" class="icon-btn desktop-only" id="toggle-list" aria-label="Liste des parcours" aria-expanded="true">☰</button>
   <a class="brand" href="./" id="brand">
     <img src="assets/logo-96.png" alt="" width="40" height="33">
     <span class="brand-name">TCAP</span><span class="brand-sub">Parcours</span>
   </a>
-  <div class="topbar-title" id="topbar-title"></div>
-  <button type="button" class="icon-btn desktop-only" id="toggle-info" aria-label="Infos du parcours" aria-expanded="false">ⓘ</button>
+  <button type="button" class="btn btn-primary admin-only" id="share-selection" title="Partager le sondage" disabled>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>
+    <span class="label">Partager</span><span id="share-selection-count"></span>
+  </button>
 </header>
 
-<nav class="tabs mobile-only" aria-label="Vues">
-  <button type="button" class="tab" data-tab="list">Liste <span class="tab-count" id="tab-list-count"></span></button>
-  <button type="button" class="tab is-active" data-tab="map">Carte</button>
-</nav>
-
-<main class="main">
-
-  <!-- Panneau liste : filtres + parcours -->
-  <aside class="panel panel-list" id="panel-list">
-    <div class="panel-head desktop-only">
-      <strong>Parcours</strong>
-      <button type="button" class="close" data-close="list" aria-label="Fermer">×</button>
-    </div>
-    <div class="panel-body">
-      <div class="list-toolbar mobile-only">
-        <span id="count-mobile"></span>
-        <button type="button" class="btn btn-sm" id="toggle-filters" aria-expanded="false">Filtres<span class="badge" id="filters-badge" hidden></span></button>
-      </div>
-      <form class="filters" id="filters" onsubmit="return false">
-        <label>Départ <select id="filter-start"></select></label>
-        <label>Type de séance <select id="filter-type"></select></label>
-        <label>Terrain <select id="filter-tag"></select></label>
-        <label>Trier par <select id="filter-sort"></select></label>
-        <div class="filters-foot"><span id="count-desktop"></span><button type="button" class="link-btn" id="reset-filters">Réinitialiser</button></div>
-      </form>
-      <ul class="route-list" id="route-list"></ul>
-    </div>
-  </aside>
+<div class="main">
 
   <!-- Carte -->
   <div class="map-area">
@@ -66,20 +40,47 @@
       </div>
     </div>
     <div class="map-hint desktop-only" id="map-hint">Cliquez sur un tracé ou choisissez un parcours dans la liste.</div>
-    <div class="map-card mobile-only" id="map-card" hidden></div>
   </div>
 
-  <!-- Panneau infos : panneau latéral (bureau) / modale glissante (mobile) -->
-  <div class="backdrop mobile-only" id="backdrop" hidden></div>
-  <aside class="panel panel-info" id="panel-info" hidden aria-label="Infos du parcours">
-    <div class="panel-head">
-      <strong>Infos</strong>
-      <button type="button" class="close" data-close="info" aria-label="Fermer">×</button>
-    </div>
-    <div class="panel-body info" id="info"></div>
+  <!-- Panneau : colonne à gauche (bureau) / feuille inférieure (mobile). Deux vues : liste ou fiche. -->
+  <aside class="panel" id="panel">
+    <button type="button" class="sheet-handle mobile-only" id="sheet-handle" aria-label="Déplier ou replier"></button>
+
+    <section class="view" id="list-view">
+      <div class="panel-head">
+        <div class="head-row">
+          <strong>Parcours</strong>
+          <span class="count" id="count-mobile"></span>
+          <button type="button" class="btn btn-sm admin-only mobile-only" id="toggle-filters" aria-expanded="false">Filtres<span class="badge" id="filters-badge" hidden></span></button>
+        </div>
+      </div>
+      <div class="panel-body">
+        <form class="filters admin-only" id="filters" onsubmit="return false">
+          <label>Départ <select id="filter-start"></select></label>
+          <label>Type de séance <select id="filter-type"></select></label>
+          <label>Terrain <select id="filter-tag"></select></label>
+          <label>Trier par <select id="filter-sort"></select></label>
+          <div class="filter-range">
+            <span class="filter-range-title">Distance <em id="range-value"></em></span>
+            <div class="dual-range">
+              <div class="dual-range-track"><div class="dual-range-fill" id="range-fill"></div></div>
+              <input type="range" id="range-min" min="0" max="100" step="1" value="0" aria-label="Distance minimale (km)">
+              <input type="range" id="range-max" min="0" max="100" step="1" value="100" aria-label="Distance maximale (km)">
+            </div>
+          </div>
+          <div class="filters-foot"><span id="count-desktop"></span><button type="button" class="link-btn admin-only" id="clear-selection" hidden>Vider la sélection</button><button type="button" class="link-btn" id="reset-filters">Réinitialiser</button></div>
+        </form>
+        <ul class="route-list" id="route-list"></ul>
+      </div>
+    </section>
+
+    <section class="view" id="detail-view" hidden>
+      <div class="panel-head detail-head" id="detail-head"></div>
+      <div class="panel-body info" id="info"></div>
+    </section>
   </aside>
 
-</main>
+</div>
 
 <div class="toast" id="toast" hidden></div>
 
