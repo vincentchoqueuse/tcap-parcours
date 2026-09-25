@@ -131,7 +131,7 @@
     const panel = $("#panel"), main = $(".main");
     const head = $(state.routeId ? "#detail-head" : "#list-view .panel-head");
     if (state_ === "open") return panel.offsetHeight;
-    if (state_ === "half") return Math.round(main.offsetHeight * 0.5);
+    if (state_ === "half") return Math.round(main.offsetHeight * 0.45);
     return head.offsetHeight + 22;   // 22 px : poignée
   }
   function applySheet(animate) {
@@ -563,7 +563,7 @@
   function openRoute(id) {
     history.pushState({ id }, "", buildQuery(id));
     selectRoute(id, 0);
-    if (isMobile()) setSheet(id ? "half" : "open");
+    if (isMobile()) setSheet("half");
   }
 
   /* ---------- événements ---------- */
@@ -632,7 +632,7 @@
   renderFilters();
   onBasketChange();
   applyMode();
-  state.sheet = query.get("sheet") === "open" ? "open" : initialId ? "half" : "open";   // mobile : liste dépliée à l'arrivée ; fiche à moitié (ou dépliée avec &sheet=open)
+  state.sheet = query.get("sheet") === "open" ? "open" : "half";   // mobile : feuille à mi-hauteur par défaut (dépliée seulement avec &sheet=open)
   document.body.classList.add("no-anim");   // pas de glissement des panneaux au chargement
   selectRoute(initialId, 0);
   setTimeout(() => document.body.classList.remove("no-anim"), 400);
