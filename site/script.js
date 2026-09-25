@@ -65,7 +65,7 @@
   }
   const $ = (selector, root) => (root || document).querySelector(selector);
   const $$ = (selector, root) => [...(root || document).querySelectorAll(selector)];
-  const isMobile = () => window.matchMedia("(max-width: 900px)").matches;
+  const isMobile = () => window.matchMedia("(max-width: 760px)").matches;
   const typeClass = type => "type-" + type.normalize("NFD").replace(/[̀-ͯ]/g, "");
   const fmtKm = km => km.toLocaleString("fr-FR");
   const routeUrl = id => location.origin + location.pathname.replace(/index\.html$/, "") + "?id=" + id;

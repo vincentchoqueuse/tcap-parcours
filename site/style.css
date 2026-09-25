@@ -14,7 +14,7 @@
   --radius: 14px;
   --shadow: 0 1px 3px rgba(15, 23, 42, .08), 0 1px 2px rgba(15, 23, 42, .06);
   --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, .10), 0 4px 6px -4px rgba(15, 23, 42, .10);
-  --topbar-h: 60px; --panel-w: 400px; --gap: 12px; --peek: 64px;
+  --topbar-h: 60px; --panel-w: 400px; --panel-w-tablet: 340px; --gap: 12px; --peek: 64px;
   --font: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
@@ -28,7 +28,7 @@ body {
 a { color: var(--green-700); }
 button, select, input { font: inherit; }
 [hidden] { display: none !important; }
-@media (min-width: 901px) { .mobile-only { display: none !important; } #count-desktop { display: none; } }
+@media (min-width: 761px) { .mobile-only { display: none !important; } #count-desktop { display: none; } }
 
 /* ---------- boutons ---------- */
 .btn {
@@ -218,9 +218,9 @@ body.mode-vote .admin-only { display: none !important; }
 .toast { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%); z-index: 100; padding: 9px 16px; background: var(--slate-900); color: #fff; border-radius: 10px; box-shadow: var(--shadow-lg); font-size: 13px; }
 
 /* ==========================================================================
-   MOBILE (≤ 900 px) : carte plein écran, panneau en feuille inférieure (repliée / dépliée)
+   MOBILE (≤ 760 px, téléphones ; les tablettes gardent la disposition bureau) : carte plein écran, panneau en feuille inférieure (repliée / dépliée)
    ========================================================================== */
-@media (max-width: 900px) {
+@media (max-width: 760px) {
   .desktop-only { display: none !important; }
   .mobile-only { display: block; }
   .topbar { padding: 0 12px; }
@@ -251,3 +251,5 @@ body.mode-vote .admin-only { display: none !important; }
   #toggle-filters[aria-expanded="true"] { background: var(--green-50); border-color: var(--green-100); color: var(--green-700); }
 }
 @media (max-width: 380px) { .filters { grid-template-columns: 1fr; } }
+/* tablette en portrait : colonne un peu plus étroite pour laisser de la place à la carte */
+@media (min-width: 761px) and (max-width: 1024px) { .panel { flex-basis: var(--panel-w-tablet); width: var(--panel-w-tablet); } }
