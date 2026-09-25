@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx version="1.1" creator="tcap-parcours" xmlns="http://www.topografix.com/GPX/1/1">
-  <metadata><name>Fractionné plat Dreizoc – Gorrequear – 8 × 2'</name></metadata>
-  <trk><name>Fractionné plat Dreizoc – Gorrequear – 8 × 2'</name><trkseg>
+  <metadata><name>fractionne-dreizoc-3</name></metadata>
+  <trk><name>fractionne-dreizoc-3</name><trkseg>
     <trkpt lat="48.370151" lon="-4.640642"><ele>63.0</ele></trkpt>
     <trkpt lat="48.370018" lon="-4.641210"><ele>59.4</ele></trkpt>
     <trkpt lat="48.369819" lon="-4.641682"><ele>59.6</ele></trkpt>
@@ -224,28 +224,28 @@
     <trkpt lat="48.373873" lon="-4.650813"><ele>59.4</ele></trkpt>
     <trkpt lat="48.374148" lon="-4.650831"><ele>58.6</ele></trkpt>
     <trkpt lat="48.374530" lon="-4.650433"><ele>57.2</ele></trkpt>
-    <trkpt lat="48.374547" lon="-4.650320"><ele>57.0</ele></trkpt>
-    <trkpt lat="48.374518" lon="-4.650210"><ele>56.8</ele></trkpt>
-    <trkpt lat="48.373987" lon="-4.649293"><ele>57.0</ele></trkpt>
-    <trkpt lat="48.373970" lon="-4.649182"><ele>57.0</ele></trkpt>
-    <trkpt lat="48.374034" lon="-4.649053"><ele>56.8</ele></trkpt>
-    <trkpt lat="48.374239" lon="-4.648964"><ele>56.2</ele></trkpt>
-    <trkpt lat="48.374265" lon="-4.648916"><ele>56.0</ele></trkpt>
-    <trkpt lat="48.374249" lon="-4.648623"><ele>55.8</ele></trkpt>
-    <trkpt lat="48.374274" lon="-4.648417"><ele>55.8</ele></trkpt>
-    <trkpt lat="48.374338" lon="-4.648164"><ele>55.6</ele></trkpt>
-    <trkpt lat="48.374585" lon="-4.647580"><ele>54.6</ele></trkpt>
-    <trkpt lat="48.374654" lon="-4.647043"><ele>54.0</ele></trkpt>
-    <trkpt lat="48.374693" lon="-4.646936"><ele>53.8</ele></trkpt>
-    <trkpt lat="48.374780" lon="-4.646820"><ele>53.8</ele></trkpt>
-    <trkpt lat="48.374850" lon="-4.646806"><ele>54.0</ele></trkpt>
-    <trkpt lat="48.374921" lon="-4.647114"><ele>53.4</ele></trkpt>
-    <trkpt lat="48.374998" lon="-4.647211"><ele>53.2</ele></trkpt>
-    <trkpt lat="48.375056" lon="-4.647179"><ele>53.0</ele></trkpt>
-    <trkpt lat="48.375226" lon="-4.646615"><ele>52.2</ele></trkpt>
-    <trkpt lat="48.375259" lon="-4.646351"><ele>52.4</ele></trkpt>
-    <trkpt lat="48.375447" lon="-4.645629"><ele>53.4</ele></trkpt>
-    <trkpt lat="48.375463" lon="-4.645348"><ele>53.4</ele></trkpt>
+    <trkpt lat="48.374340" lon="-4.649926"><ele>56.9</ele></trkpt>
+    <trkpt lat="48.373872" lon="-4.649206"><ele>56.4</ele></trkpt>
+    <trkpt lat="48.373363" lon="-4.648418"><ele>55.8</ele></trkpt>
+    <trkpt lat="48.373270" lon="-4.648207"><ele>55.7</ele></trkpt>
+    <trkpt lat="48.373293" lon="-4.648161"><ele>55.7</ele></trkpt>
+    <trkpt lat="48.373531" lon="-4.647677"><ele>55.3</ele></trkpt>
+    <trkpt lat="48.373620" lon="-4.647473"><ele>55.2</ele></trkpt>
+    <trkpt lat="48.373818" lon="-4.646807"><ele>54.8</ele></trkpt>
+    <trkpt lat="48.373999" lon="-4.646315"><ele>54.6</ele></trkpt>
+    <trkpt lat="48.374054" lon="-4.646174"><ele>54.5</ele></trkpt>
+    <trkpt lat="48.374155" lon="-4.645919"><ele>54.3</ele></trkpt>
+    <trkpt lat="48.374416" lon="-4.645306"><ele>53.9</ele></trkpt>
+    <trkpt lat="48.374477" lon="-4.645248"><ele>53.9</ele></trkpt>
+    <trkpt lat="48.374528" lon="-4.645133"><ele>53.8</ele></trkpt>
+    <trkpt lat="48.374565" lon="-4.645124"><ele>53.8</ele></trkpt>
+    <trkpt lat="48.374594" lon="-4.645088"><ele>53.8</ele></trkpt>
+    <trkpt lat="48.374609" lon="-4.645080"><ele>53.7</ele></trkpt>
+    <trkpt lat="48.374652" lon="-4.645058"><ele>53.7</ele></trkpt>
+    <trkpt lat="48.374809" lon="-4.645037"><ele>53.6</ele></trkpt>
+    <trkpt lat="48.375016" lon="-4.644965"><ele>53.4</ele></trkpt>
+    <trkpt lat="48.375186" lon="-4.644876"><ele>53.3</ele></trkpt>
+    <trkpt lat="48.375289" lon="-4.644799"><ele>53.2</ele></trkpt>
     <trkpt lat="48.375365" lon="-4.644866"><ele>53.2</ele></trkpt>
     <trkpt lat="48.375129" lon="-4.644271"><ele>53.4</ele></trkpt>
     <trkpt lat="48.375149" lon="-4.644159"><ele>53.4</ele></trkpt>

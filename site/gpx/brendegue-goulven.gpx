@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx version="1.1" creator="tcap-parcours" xmlns="http://www.topografix.com/GPX/1/1">
-  <metadata><name>Gorrequear – Brendégué – Goulven – 5 × 1'45</name></metadata>
-  <trk><name>Gorrequear – Brendégué – Goulven – 5 × 1'45</name><trkseg>
+  <metadata><name>brendegue-goulven</name></metadata>
+  <trk><name>brendegue-goulven</name><trkseg>
     <trkpt lat="48.369999" lon="-4.640233"><ele>60.8</ele></trkpt>
     <trkpt lat="48.370105" lon="-4.640171"><ele>60.6</ele></trkpt>
     <trkpt lat="48.370701" lon="-4.640035"><ele>59.0</ele></trkpt>
@@ -45,15 +45,47 @@
     <trkpt lat="48.376282" lon="-4.646162"><ele>51.2</ele></trkpt>
     <trkpt lat="48.376249" lon="-4.646680"><ele>51.4</ele></trkpt>
     <trkpt lat="48.376152" lon="-4.646986"><ele>51.8</ele></trkpt>
-    <trkpt lat="48.375667" lon="-4.647796"><ele>52.2</ele></trkpt>
-    <trkpt lat="48.375324" lon="-4.648290"><ele>52.8</ele></trkpt>
-    <trkpt lat="48.374939" lon="-4.649102"><ele>54.8</ele></trkpt>
-    <trkpt lat="48.374757" lon="-4.649287"><ele>56.0</ele></trkpt>
-    <trkpt lat="48.374602" lon="-4.649564"><ele>56.8</ele></trkpt>
-    <trkpt lat="48.374407" lon="-4.649786"><ele>57.0</ele></trkpt>
-    <trkpt lat="48.374352" lon="-4.649928"><ele>57.2</ele></trkpt>
-    <trkpt lat="48.375042" lon="-4.651183"><ele>56.8</ele></trkpt>
-    <trkpt lat="48.375462" lon="-4.651840"><ele>56.4</ele></trkpt>
+    <trkpt lat="48.376213" lon="-4.646833"><ele>51.9</ele></trkpt>
+    <trkpt lat="48.376304" lon="-4.645905"><ele>52.3</ele></trkpt>
+    <trkpt lat="48.376317" lon="-4.645752"><ele>52.4</ele></trkpt>
+    <trkpt lat="48.376299" lon="-4.645624"><ele>52.4</ele></trkpt>
+    <trkpt lat="48.376252" lon="-4.645536"><ele>52.5</ele></trkpt>
+    <trkpt lat="48.375988" lon="-4.645320"><ele>52.7</ele></trkpt>
+    <trkpt lat="48.375928" lon="-4.645284"><ele>52.7</ele></trkpt>
+    <trkpt lat="48.375855" lon="-4.645303"><ele>52.8</ele></trkpt>
+    <trkpt lat="48.375646" lon="-4.645393"><ele>53.0</ele></trkpt>
+    <trkpt lat="48.375568" lon="-4.645405"><ele>53.0</ele></trkpt>
+    <trkpt lat="48.375502" lon="-4.645368"><ele>53.1</ele></trkpt>
+    <trkpt lat="48.375446" lon="-4.645273"><ele>53.1</ele></trkpt>
+    <trkpt lat="48.375289" lon="-4.644799"><ele>53.4</ele></trkpt>
+    <trkpt lat="48.375186" lon="-4.644876"><ele>53.4</ele></trkpt>
+    <trkpt lat="48.375016" lon="-4.644965"><ele>53.6</ele></trkpt>
+    <trkpt lat="48.374809" lon="-4.645037"><ele>53.7</ele></trkpt>
+    <trkpt lat="48.374652" lon="-4.645058"><ele>53.8</ele></trkpt>
+    <trkpt lat="48.374609" lon="-4.645080"><ele>53.9</ele></trkpt>
+    <trkpt lat="48.374594" lon="-4.645088"><ele>53.9</ele></trkpt>
+    <trkpt lat="48.374565" lon="-4.645124"><ele>53.9</ele></trkpt>
+    <trkpt lat="48.374528" lon="-4.645133"><ele>53.9</ele></trkpt>
+    <trkpt lat="48.374477" lon="-4.645248"><ele>54.0</ele></trkpt>
+    <trkpt lat="48.374416" lon="-4.645306"><ele>54.0</ele></trkpt>
+    <trkpt lat="48.374155" lon="-4.645919"><ele>54.4</ele></trkpt>
+    <trkpt lat="48.374054" lon="-4.646174"><ele>54.5</ele></trkpt>
+    <trkpt lat="48.373999" lon="-4.646315"><ele>54.6</ele></trkpt>
+    <trkpt lat="48.373818" lon="-4.646807"><ele>54.9</ele></trkpt>
+    <trkpt lat="48.373620" lon="-4.647473"><ele>55.2</ele></trkpt>
+    <trkpt lat="48.373531" lon="-4.647677"><ele>55.3</ele></trkpt>
+    <trkpt lat="48.373293" lon="-4.648161"><ele>55.6</ele></trkpt>
+    <trkpt lat="48.373270" lon="-4.648207"><ele>55.6</ele></trkpt>
+    <trkpt lat="48.373363" lon="-4.648418"><ele>55.7</ele></trkpt>
+    <trkpt lat="48.373872" lon="-4.649206"><ele>56.2</ele></trkpt>
+    <trkpt lat="48.374340" lon="-4.649926"><ele>56.7</ele></trkpt>
+    <trkpt lat="48.374586" lon="-4.650397"><ele>57.0</ele></trkpt>
+    <trkpt lat="48.374689" lon="-4.650558"><ele>57.1</ele></trkpt>
+    <trkpt lat="48.374797" lon="-4.650770"><ele>57.2</ele></trkpt>
+    <trkpt lat="48.374886" lon="-4.650879"><ele>57.3</ele></trkpt>
+    <trkpt lat="48.375291" lon="-4.651539"><ele>57.7</ele></trkpt>
+    <trkpt lat="48.375894" lon="-4.652483"><ele>58.3</ele></trkpt>
+    <trkpt lat="48.375970" lon="-4.652581"><ele>58.4</ele></trkpt>
     <trkpt lat="48.375984" lon="-4.652563"><ele>58.4</ele></trkpt>
     <trkpt lat="48.376485" lon="-4.653021"><ele>59.8</ele></trkpt>
     <trkpt lat="48.377190" lon="-4.653411"><ele>59.8</ele></trkpt>
