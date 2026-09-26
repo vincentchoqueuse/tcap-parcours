@@ -494,7 +494,7 @@
     on('[data-action="copy"]', () => copyToClipboard(routeUrl(route.id)));
     on('[data-action="share"]', () => navigator.share({ title: route.name, text: `${route.name} · ${fmtKm(v.dist_km)} km · D+ ${v.dplus} m · ${v.moving}`, url: routeUrl(route.id) }).catch(() => {}));
     on('[data-action="basket"]', () => toggleBasket(route.id));
-    on('[data-action="qr"]', () => openQr(route, v));
+    on('[data-action="qr"]', () => openQr(route));
   }
   /* ---------- sélection pour le vote WhatsApp ---------- */
   const BASKET_KEY = "tcap-vote";
@@ -537,23 +537,18 @@
     return lines.join("\n");
   }
   /* ---------- QR code : fiche ou fichier GPX ---------- */
-  const qr = { route: null, variant: null, mode: "page" };
-  const gpxUrl = v => location.origin + location.pathname.replace(/index\.html$/, "") + v.gpx;
+  const qr = { route: null };
   function renderQr() {
-    const url = qr.mode === "gpx" ? gpxUrl(qr.variant) : routeUrl(qr.route.id);
-    $$("[data-qr]").forEach(b => b.classList.toggle("is-active", b.dataset.qr === qr.mode));
+    const url = routeUrl(qr.route.id);
     $("#qr-title").textContent = qr.route.name;
     $("#qr-url").value = url;
-    $("#qr-hint").textContent = qr.mode === "gpx"
-      ? "À scanner pour télécharger directement la trace GPX. Sur iPhone, Safari propose ensuite de l'ouvrir dans Strava, Garmin Connect ou Komoot."
-      : "À scanner pour ouvrir la fiche du parcours, carte et bouton GPX compris.";
+    $("#qr-hint").textContent = "À scanner pour ouvrir la fiche du parcours, carte et bouton GPX compris.";
     if (typeof qrcode !== "function") { $("#qr-code").innerHTML = `<p class="hint">Générateur de QR code indisponible hors ligne.</p>`; return; }
     const code = qrcode(0, "M"); code.addData(url); code.make();
     $("#qr-code").innerHTML = code.createSvgTag({ cellSize: 6, margin: 2, scalable: true });
   }
-  function openQr(route, variant) { qr.route = route; qr.variant = variant; qr.mode = "page"; renderQr(); $("#qr-modal").hidden = false; $("#qr-backdrop").hidden = false; }
+  function openQr(route) { qr.route = route; renderQr(); $("#qr-modal").hidden = false; $("#qr-backdrop").hidden = false; }
   function closeQr() { $("#qr-modal").hidden = true; $("#qr-backdrop").hidden = true; }
-  $$("[data-qr]").forEach(b => b.addEventListener("click", () => { qr.mode = b.dataset.qr; renderQr(); }));
   $("#qr-close").addEventListener("click", closeQr);
   $("#qr-backdrop").addEventListener("click", closeQr);
   $("#qr-url").addEventListener("click", e => { e.target.select(); copyToClipboard(e.target.value); });
@@ -653,5 +648,5 @@
   document.body.classList.add("no-anim");   // pas de glissement des panneaux au chargement
   selectRoute(initialId, 0);
   setTimeout(() => document.body.classList.remove("no-anim"), 400);
-  if (initialId && query.get("qr") === "1" && ROUTE_BY_ID[initialId]) openQr(ROUTE_BY_ID[initialId], ROUTE_BY_ID[initialId].variants[0]);   // &qr=1 : ouvre directement le QR code
+  if (initialId && query.get("qr") === "1" && ROUTE_BY_ID[initialId]) openQr(ROUTE_BY_ID[initialId]);   // &qr=1 : ouvre directement le QR code
 })();
