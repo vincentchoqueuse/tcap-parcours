@@ -5,3 +5,5 @@ export_*/
 
 # outils de génération et catalogue (identifiants d'activités Strava) : non publiés
 build/
+# tracés bruts déposés pour import (horodatés) : non publiés
+new/
