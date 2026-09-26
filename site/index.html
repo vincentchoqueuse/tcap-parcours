@@ -82,9 +82,23 @@
 
 </div>
 
+<!-- QR code d'un parcours -->
+<div class="modal-backdrop" id="qr-backdrop" hidden></div>
+<section class="modal qr-modal" id="qr-modal" hidden role="dialog" aria-modal="true" aria-labelledby="qr-title">
+  <div class="modal-head"><strong id="qr-title">QR code</strong><button type="button" class="close" id="qr-close" aria-label="Fermer">×</button></div>
+  <div class="segmented qr-switch" role="group" aria-label="Contenu du QR code">
+    <button type="button" class="segmented-btn is-active" data-qr="page">Fiche du parcours</button>
+    <button type="button" class="segmented-btn" data-qr="gpx">Fichier GPX</button>
+  </div>
+  <div class="qr-code" id="qr-code"></div>
+  <p class="qr-hint" id="qr-hint"></p>
+  <input type="text" class="qr-url" id="qr-url" readonly>
+</section>
+
 <div class="toast" id="toast" hidden></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" crossorigin="anonymous"></script>
 <script src="data/routes.js"></script>
 <script src="script.js"></script>
 </body>

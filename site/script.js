@@ -37,6 +37,7 @@
     whatsapp: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 12 12 0 0 0 4.6 4c.6.3 1.1.4 1.5.6.6.2 1.2.2 1.6.1.5-.1 1.5-.6 1.7-1.2s.2-1.1.2-1.2-.3-.2-.5-.3z"/></svg>',
     basket: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h18v8H3z"/><path d="M7 12V5h10v7"/><path d="M10 8.5h4"/><path d="M6 12h12"/></svg>',
     info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>',
+    qr: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v1M14 20h1M18 18h3v3"/></svg>',
     chef: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21h10"/><path d="M7 21v-6"/><path d="M17 21v-6"/><path d="M6 15h12"/><path d="M6 15V9.5a2.5 2.5 0 0 1-1-4.6A3 3 0 0 1 9.3 3a3.5 3.5 0 0 1 5.4 0 3 3 0 0 1 4.3 1.9 2.5 2.5 0 0 1-1 4.6V15"/></svg>',
   };
 
@@ -484,6 +485,7 @@
     return `
       ${btn(`a class="btn btn-primary" href="${v.gpx}" download`, ICONS.gpx, "GPX")}
       ${btn(`button type="button" class="btn" data-action="copy"`, ICONS.link, "Lien à copier")}
+      ${btn(`button type="button" class="btn" data-action="qr"`, ICONS.qr, "QR code")}
       ${publicMode() ? "" : btn(`button type="button" class="btn admin-only${inVote ? " is-active" : ""}" data-action="basket"`, inVote ? ICONS.minus : ICONS.plus, inVote ? "Retirer de la sélection" : "Ajouter à la sélection")}
 `;
   }
@@ -492,6 +494,7 @@
     on('[data-action="copy"]', () => copyToClipboard(routeUrl(route.id)));
     on('[data-action="share"]', () => navigator.share({ title: route.name, text: `${route.name} · ${fmtKm(v.dist_km)} km · D+ ${v.dplus} m · ${v.moving}`, url: routeUrl(route.id) }).catch(() => {}));
     on('[data-action="basket"]', () => toggleBasket(route.id));
+    on('[data-action="qr"]', () => openQr(route, v));
   }
   /* ---------- sélection pour le vote WhatsApp ---------- */
   const BASKET_KEY = "tcap-vote";
@@ -533,6 +536,29 @@
     lines.push("Vote en réagissant à ce message avec l'emoji du parcours choisi (une seule réaction par personne).");
     return lines.join("\n");
   }
+  /* ---------- QR code : fiche ou fichier GPX ---------- */
+  const qr = { route: null, variant: null, mode: "page" };
+  const gpxUrl = v => location.origin + location.pathname.replace(/index\.html$/, "") + v.gpx;
+  function renderQr() {
+    const url = qr.mode === "gpx" ? gpxUrl(qr.variant) : routeUrl(qr.route.id);
+    $$("[data-qr]").forEach(b => b.classList.toggle("is-active", b.dataset.qr === qr.mode));
+    $("#qr-title").textContent = qr.route.name;
+    $("#qr-url").value = url;
+    $("#qr-hint").textContent = qr.mode === "gpx"
+      ? "À scanner pour télécharger directement la trace GPX. Sur iPhone, Safari propose ensuite de l'ouvrir dans Strava, Garmin Connect ou Komoot."
+      : "À scanner pour ouvrir la fiche du parcours, carte et bouton GPX compris.";
+    if (typeof qrcode !== "function") { $("#qr-code").innerHTML = `<p class="hint">Générateur de QR code indisponible hors ligne.</p>`; return; }
+    const code = qrcode(0, "M"); code.addData(url); code.make();
+    $("#qr-code").innerHTML = code.createSvgTag({ cellSize: 6, margin: 2, scalable: true });
+  }
+  function openQr(route, variant) { qr.route = route; qr.variant = variant; qr.mode = "page"; renderQr(); $("#qr-modal").hidden = false; $("#qr-backdrop").hidden = false; }
+  function closeQr() { $("#qr-modal").hidden = true; $("#qr-backdrop").hidden = true; }
+  $$("[data-qr]").forEach(b => b.addEventListener("click", () => { qr.mode = b.dataset.qr; renderQr(); }));
+  $("#qr-close").addEventListener("click", closeQr);
+  $("#qr-backdrop").addEventListener("click", closeQr);
+  $("#qr-url").addEventListener("click", e => { e.target.select(); copyToClipboard(e.target.value); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("#qr-modal").hidden) closeQr(); });
+
   /* ---------- navigation ---------- */
   function selectRoute(id, variantIndex) {
     const route = ROUTE_BY_ID[id];
@@ -627,4 +653,5 @@
   document.body.classList.add("no-anim");   // pas de glissement des panneaux au chargement
   selectRoute(initialId, 0);
   setTimeout(() => document.body.classList.remove("no-anim"), 400);
+  if (initialId && query.get("qr") === "1" && ROUTE_BY_ID[initialId]) openQr(ROUTE_BY_ID[initialId], ROUTE_BY_ID[initialId].variants[0]);   // &qr=1 : ouvre directement le QR code
 })();
