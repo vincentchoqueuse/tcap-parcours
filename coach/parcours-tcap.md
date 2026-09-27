@@ -1,6 +1,6 @@
 # Parcours du TCAP
 
-Catalogue des parcours du club, 45 fiches. Site : https://vincentchoqueuse.github.io/tcap-parcours/ — chaque fiche a un lien direct (`lien`) vers la carte, le profil et le GPX.
+Catalogue des parcours du club, 47 fiches. Site : https://vincentchoqueuse.github.io/tcap-parcours/ — chaque fiche a un lien direct (`lien`) vers la carte, le profil et le GPX.
 
 Départ habituel : Keralaurent, Locmaria-Plouzané (rendez-vous du club). Les durées sont indicatives, à allure club, pauses non comprises.
 
@@ -1363,4 +1363,62 @@ Le tracé de l'ultra de 57 km du Trail du Bout du Monde (Plouzané, chaque été
 Montées principales : km 7.3→8.2 +44 m (4.9 %) ; km 12.6→13.0 +43 m (10.7 %) ; km 15.6→17.1 +46 m (3.2 %) ; km 25.7→26.9 +40 m (3.4 %).
 
 L'avis du Chef Fab : Le TBM, le vrai, celui avec un dossard et une arrivée sous l'abbaye. Cinquante-sept bornes en ligne, du vélodrome de Plouzané à la pointe Saint-Mathieu, en passant par tout ce que la côte a de plus beau et de plus cassant. Mille trois cents mètres de D+ « seulement », dit la plaquette. Ce que la plaquette ne dit pas, c'est que ça vient par tranches de vingt mètres, deux cents fois, et que le juge de paix n'est pas le terrain, c'est le ciel. Quand il fait chaud, c'est la mort : à partir du Trez-Hir tu portes la croix, sans un arbre pour la poser, et après Saint-Mathieu tu la portes encore jusqu'à Kermorvan. Le syndicat n'a rien réclamé ce jour-là, il n'avait plus de salive. Alors on boit avant d'avoir soif, on marche les côtes sans honte, et on arrive sous l'abbaye avec du sang dans la bouche et une histoire pour dix ans. Ceux qui l'ont finie un jour de canicule ont ma bénédiction éternelle.
+
+
+---
+id: grf-166
+nom: "GRF 166 : le tour de la presqu'île de Crozon"
+lien: https://vincentchoqueuse.github.io/tcap-parcours/?id=grf-166
+gpx: https://vincentchoqueuse.github.io/tcap-parcours/gpx/grf-166.gpx
+type: Ultra
+depart: "Telgruc-sur-Mer (presqu'île de Crozon)"
+depart_club: non (départ déporté, covoiturage)
+distance_km: 167.9
+denivele_positif_m: 3238
+denivele_negatif_m: 3238
+duree_indicative: "27 h 48" (estimée)
+difficulte: Déraisonnable (200.3 km-effort)
+boucle: oui
+pente_max_pct: 22.0
+part_pente_forte_pct: 28
+altitude_m: 2 à 328
+tags: [GR34, littoral, parcours de course, sortie longue, départ déporté, Short Orange]
+---
+
+## GRF 166 : le tour de la presqu'île de Crozon
+
+Le Grand Raid du Finistère, format 166 : le tour complet de la presqu'île de Crozon au départ de Telgruc-sur-Mer. Pentrez et la baie de Douarnenez, l'intérieur par Ploéven, Dinéault et Trégarvan, l'Aulne à Landévennec, la rade de Brest par Lanvéoc, Roscanvel et la pointe des Espagnols, puis Camaret, Pen-Hir et les Tas de Pois, Saint-Hernot et le cap de la Chèvre, retour à Telgruc par Tal ar Groas. 168 km et 3 200 m de D+ en une seule boucle, une nuit dehors au minimum. Tracé officiel de la course, couru par Short Orange. La durée affichée est un calcul à l'allure club : sur ce format, elle ne veut plus dire grand-chose.
+
+Montées principales : km 24.4→27.2 +145 m (5.1 %) ; km 28.4→31.2 +175 m (6.2 %) ; km 42.0→44.2 +70 m (3.1 %) ; km 52.0→53.4 +86 m (6.3 %).
+
+L'avis du Chef Fab : Cent soixante-huit kilomètres. Le tour de la presqu'île de Crozon, celle qu'on regarde tous les dimanches depuis Déolen en se disant « elle est belle, là-bas, en face ». Short Orange a décidé d'aller vérifier. À pied. En une fois. Le principe du Grand Raid du Finistère est simple : tu pars de Telgruc un vendredi, tu vois le soleil se coucher sur la baie de Douarnenez, se lever sur la rade de Brest, et si tout va bien tu le revois se coucher sur les Tas de Pois. Entre les deux, il y a Landévennec, l'Aulne, Roscanvel, la pointe des Espagnols, Camaret, Pen-Hir, le cap de la Chèvre, et un nombre de criques que personne n'a jamais eu le courage de compter. Ici, le rab de 20 % n'est plus une blague, c'est une unité de mesure : trois mille deux cents mètres de D+ sur le papier, et le papier ne parle ni de la nuit, ni du vent d'ouest à Pen-Hir, ni de ce moment, vers le kilomètre cent trente, où tes jambes envoient un courrier recommandé à ton cerveau pour demander une rupture conventionnelle. Le syndicat a lu le règlement, a demandé s'il y avait une version courte, et a été informé qu'il y en avait une : elle s'appelle le GRF 100, et Short Orange la considère comme un échauffement. Je ne vous demande pas de le faire. Je vous demande de regarder la trace, de repérer Déolen sur la carte, tout petit, en face, de l'autre côté du goulet, et de comprendre que quelqu'un du club a couru tout ce qu'il y a de l'autre côté. Avec du sang dans la bouche, forcément. Mais avec le sourire, parce que c'est ça, une chèvre : ça monte, ça descend, et ça ne demande jamais pourquoi. Gast.
+
+
+---
+id: grf-250
+nom: "GRF Legend 250 : de la pointe du Raz à Crozon"
+lien: https://vincentchoqueuse.github.io/tcap-parcours/?id=grf-250
+gpx: https://vincentchoqueuse.github.io/tcap-parcours/gpx/grf-250.gpx
+type: Ultra
+depart: "Plogoff (pointe du Raz), arrivée à Crozon"
+depart_club: non (départ déporté, covoiturage)
+distance_km: 250.3
+denivele_positif_m: 4950
+denivele_negatif_m: 4987
+duree_indicative: "50 h 20" (estimée)
+difficulte: Déraisonnable (299.8 km-effort)
+boucle: non, arrivée à 33.2 km du départ
+pente_max_pct: 21.7
+part_pente_forte_pct: 30
+altitude_m: 1 à 328
+tags: [GR34, littoral, parcours de course, sortie longue, en ligne, départ déporté, Short Orange]
+---
+
+## GRF Legend 250 : de la pointe du Raz à Crozon
+
+Le format Legend du Grand Raid du Finistère : 250 km en ligne de la pointe du Raz à Crozon. Plogoff, Cléden et Beuzec-Cap-Sizun, tout le Cap Sizun par le sentier côtier, Poullan et la baie de Douarnenez jusqu'à Tréfeuntec et Pentrez, puis l'intérieur par Argol, Plomodiern et Trégarvan, l'Aulne à Landévennec, Lanvéoc, Le Fret, Roscanvel, Camaret, Saint-Hernot et le cap de la Chèvre avant l'arrivée à Crozon. 250 km, 5 000 m de D+, deux nuits dehors. L'arrivée est à 33 km du départ : la logistique fait partie de l'épreuve. Tracé officiel de la course, couru par Short Orange. La durée affichée est un calcul à l'allure club, autant dire une fiction.
+
+Montées principales : km 106.8→109.7 +145 m (5.1 %) ; km 110.8→113.6 +175 m (6.2 %) ; km 134.4→135.8 +85 m (6.3 %) ; km 217.5→220.1 +77 m (3.0 %).
+
+L'avis du Chef Fab : Deux cent cinquante kilomètres. Je l'écris en toutes lettres et je le répète pour le syndicat, au fond, qui a cru à une erreur d'unité : deux cent cinquante. La pointe du Raz au départ, Crozon à l'arrivée, et entre les deux tout ce que le Finistère a inventé pour décourager les gens de marcher droit. Ça s'appelle Legend, et pour une fois le marketing est en dessous de la vérité. Tu pars du bout du monde, le vrai, celui avec le phare de la Vieille et les touristes en K-way. Tu fais tout le Cap Sizun par le sentier, Cléden, Beuzec, des falaises qui ne servent à rien d'autre qu'à être belles et raides. Tu contournes la baie de Douarnenez, ce qui prend une journée entière et une partie de ta santé mentale. Tu remontes par l'intérieur, Argol, Trégarvan, tu traverses l'Aulne à Landévennec en te demandant qui a eu l'idée. Et là, alors que n'importe quel être humain normal aurait déjà appelé sa mère, il te reste la presqu'île de Crozon. Toute. Roscanvel, Camaret, les Tas de Pois, le cap de la Chèvre. Cinq mille mètres de D+ au total, deux nuits, et le rab de 20 % qui ici s'applique à la fatigue, pas aux kilomètres. Short Orange l'a fait. Je ne sais pas ce qu'il a vu la deuxième nuit, il n'en parle pas, et quand on lui demande il regarde la mer. Le syndicat a proposé de faire cette course en relais, à douze, avec un camping-car. La motion a été enregistrée comme preuve de bonne volonté et classée sans suite. Alors voilà. Sur ce site, il y a des séances de côtes de onze kilomètres, des boucles du dimanche, des fractionnés du mardi. Et il y a ça. Ce n'est pas un parcours, c'est une frontière. On ne vous demande pas de la franchir. On vous demande de savoir qu'elle existe, et que quelqu'un qui court avec vous le jeudi soir l'a franchie, avec du sang dans la bouche et le sourire aux lèvres, et qu'il est revenu vous dire que c'était long. Ma doué. Quel morceau.
 
