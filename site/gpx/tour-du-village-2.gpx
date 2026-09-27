@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx version="1.1" creator="tcap-parcours" xmlns="http://www.topografix.com/GPX/1/1">
-  <metadata><name>Le tour du village – 2 – Boucle 22 km</name></metadata>
-  <trk><name>Le tour du village – 2 – Boucle 22 km</name><trkseg>
+  <metadata><name>tour-du-village-2</name></metadata>
+  <trk><name>tour-du-village-2</name><trkseg>
     <trkpt lat="48.370080" lon="-4.640146"><ele>60.0</ele></trkpt>
     <trkpt lat="48.370362" lon="-4.640161"><ele>60.0</ele></trkpt>
     <trkpt lat="48.370671" lon="-4.640031"><ele>58.0</ele></trkpt>

@@ -7,3 +7,4 @@ export_*/
 build/
 # tracés bruts déposés pour import (horodatés) : non publiés
 new/
+activities/

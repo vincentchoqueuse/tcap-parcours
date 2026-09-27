@@ -41,6 +41,17 @@ make check   # valide catalog.json et la syntaxe de script.js
 - **Niveau complet** (pour l'organisateur) : l'URL de base. Filtres, panier de vote (bouton « Vote » en haut à droite), message WhatsApp généré avec un emoji par parcours.
 - **Niveau public** (pour le groupe) : le lien `?ids=…` généré par le panier. Ni filtres, ni panier : seulement les parcours proposés, chacun avec son emoji, la carte et la fiche. C'est ce lien qu'on colle dans le sondage WhatsApp.
 
+## Ajouter une sortie depuis une activité (FIT ou GPX)
+
+```bash
+python3 build/import_activity.py activities/ma_sortie.fit mon-slug --label "Boucle 15 km"
+```
+
+Le script nettoie l'activité (pauses retirées du temps, sauts GPS comblés, pas d'horodatage publié), écrit `build/tracks/mon-slug.gpx`
+et affiche l'entrée à coller dans `catalog.json`. Pour une variante courte d'un parcours existant (une partie du groupe
+qui rentre plus tôt), on l'ajoute dans `variants` du même parcours, avec un slug suffixé (`mon-slug-2`) : la fiche
+propose alors les deux longueurs, la première variante servant de référence. Les activités brutes vont dans `activities/` (ignoré par git).
+
 ## Liens
 
 Toute vue a une URL, à coller dans WhatsApp ou depuis un autre site :

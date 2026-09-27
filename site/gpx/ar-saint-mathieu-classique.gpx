@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx version="1.1" creator="tcap-parcours" xmlns="http://www.topografix.com/GPX/1/1">
-  <metadata><name>A/R Saint-Mathieu – La classique – Aller-retour 34 km</name></metadata>
-  <trk><name>A/R Saint-Mathieu – La classique – Aller-retour 34 km</name><trkseg>
+  <metadata><name>ar-saint-mathieu-classique</name></metadata>
+  <trk><name>ar-saint-mathieu-classique</name><trkseg>
     <trkpt lat="48.370044" lon="-4.640701"><ele>60.0</ele></trkpt>
     <trkpt lat="48.370042" lon="-4.640779"><ele>60.0</ele></trkpt>
     <trkpt lat="48.369887" lon="-4.641188"><ele>60.0</ele></trkpt>

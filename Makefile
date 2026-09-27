@@ -2,15 +2,17 @@
 #   make build   — régénère site/data/routes.js et site/gpx/ depuis l'export Strava + build/catalog.json
 #   make serve   — sert site/ en local sur http://localhost:8765
 #   make open    — build + serve + ouvre le navigateur
+#   make coach   — exporte le catalogue en Markdown pour un projet Claude (coach/)
 #   make check   — vérifie la syntaxe de script.js et la validité de catalog.json
 #   make clean   — supprime les fichiers générés
 
 EXPORT ?= $(firstword $(wildcard export_*))
 PORT   ?= 8765
+SITE_URL ?= https://vincentchoqueuse.github.io/tcap-parcours/
 PYTHON ?= python3
 SITE    = site
 
-.PHONY: all build serve open check deps clean
+.PHONY: all build serve open check deps clean coach
 
 all: build
 
@@ -28,6 +30,9 @@ serve:
 open: build
 	@( sleep 1 ; open "http://localhost:$(PORT)/" ) &
 	@$(MAKE) --no-print-directory serve
+
+coach:
+	$(PYTHON) build/export_coach.py $(SITE_URL)
 
 check:
 	$(PYTHON) -c "import json; json.load(open('build/catalog.json', encoding='utf-8')); print('catalog.json OK')"

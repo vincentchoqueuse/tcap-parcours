@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx version="1.1" creator="tcap-parcours" xmlns="http://www.topografix.com/GPX/1/1">
-  <metadata><name>Kerlannou – Poulfos – Kélédern – Quéléren – 17,1 km</name></metadata>
-  <trk><name>Kerlannou – Poulfos – Kélédern – Quéléren – 17,1 km</name><trkseg>
+  <metadata><name>kerlannou-keledern</name></metadata>
+  <trk><name>kerlannou-keledern</name><trkseg>
     <trkpt lat="48.370097" lon="-4.640439"><ele>60.4</ele></trkpt>
     <trkpt lat="48.370114" lon="-4.640220"><ele>60.2</ele></trkpt>
     <trkpt lat="48.370140" lon="-4.640187"><ele>60.2</ele></trkpt>

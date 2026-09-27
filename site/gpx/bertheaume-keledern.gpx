@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx version="1.1" creator="tcap-parcours" xmlns="http://www.topografix.com/GPX/1/1">
-  <metadata><name>Bertheaume par le GR34, retour Kélédern – Boucle 22 km</name></metadata>
-  <trk><name>Bertheaume par le GR34, retour Kélédern – Boucle 22 km</name><trkseg>
+  <metadata><name>bertheaume-keledern</name></metadata>
+  <trk><name>bertheaume-keledern</name><trkseg>
     <trkpt lat="48.369948" lon="-4.640454"><ele>60.6</ele></trkpt>
     <trkpt lat="48.369909" lon="-4.640849"><ele>60.6</ele></trkpt>
     <trkpt lat="48.369784" lon="-4.641076"><ele>60.2</ele></trkpt>
@@ -447,7 +447,6 @@
     <trkpt lat="48.355356" lon="-4.704219"><ele>46.0</ele></trkpt>
     <trkpt lat="48.355349" lon="-4.704033"><ele>45.6</ele></trkpt>
     <trkpt lat="48.355220" lon="-4.703681"><ele>45.6</ele></trkpt>
-    <trkpt lat="48.355110" lon="-4.703200"><ele>47.6</ele></trkpt>
     <trkpt lat="48.355105" lon="-4.703076"><ele>48.0</ele></trkpt>
     <trkpt lat="48.355175" lon="-4.702758"><ele>48.6</ele></trkpt>
     <trkpt lat="48.355582" lon="-4.701755"><ele>51.0</ele></trkpt>
@@ -460,7 +459,6 @@
     <trkpt lat="48.356207" lon="-4.699633"><ele>49.2</ele></trkpt>
     <trkpt lat="48.356329" lon="-4.699423"><ele>48.8</ele></trkpt>
     <trkpt lat="48.356564" lon="-4.698731"><ele>47.6</ele></trkpt>
-    <trkpt lat="48.356697" lon="-4.698189"><ele>47.2</ele></trkpt>
     <trkpt lat="48.356819" lon="-4.697521"><ele>46.4</ele></trkpt>
     <trkpt lat="48.357262" lon="-4.696852"><ele>46.6</ele></trkpt>
     <trkpt lat="48.357436" lon="-4.696475"><ele>46.0</ele></trkpt>

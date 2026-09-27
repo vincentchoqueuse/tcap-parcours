@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx version="1.1" creator="tcap-parcours" xmlns="http://www.topografix.com/GPX/1/1">
-  <metadata><name>A/R Minou – L'indémodable – Aller-retour 20 km</name></metadata>
-  <trk><name>A/R Minou – L'indémodable – Aller-retour 20 km</name><trkseg>
+  <metadata><name>ar-minou-indemodable</name></metadata>
+  <trk><name>ar-minou-indemodable</name><trkseg>
     <trkpt lat="48.370173" lon="-4.640151"><ele>60.0</ele></trkpt>
     <trkpt lat="48.370080" lon="-4.640146"><ele>60.0</ele></trkpt>
     <trkpt lat="48.370051" lon="-4.640230"><ele>60.0</ele></trkpt>
